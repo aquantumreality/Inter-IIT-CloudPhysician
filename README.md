@@ -72,7 +72,7 @@ We also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pr
 - #### Classification Loss
 We explored a classification loss to better the accuracy, since MSE loss function is inherently a regression loss function. To make the mobilenet learn useful feature representation, we introduced Binary cross Entropy classification loss with some random images that did not contain screen as the negative train samples. 
 
-#### Planar Homography
+- #### Planar Homography
 
 An inherent problem with the datasets was the oblliqueness of the monitor screens which led to issues in optical character recognition of the vitals.Therefore, we used classic Computer vision techniques for warping the oblique images onto a plane to make it easier for the OCR to recognize the vitals accuractely.
 
@@ -86,7 +86,9 @@ In this stage, we used the **PaddleOCR** library for text extraction from the bo
 
 (About PaddleOCR: PaddleOCR is an optical character recognition (OCR) toolkit developed by PaddlePaddle (PArallel Distributed Deep LEarning), an open-source deep learning platform. It provides a comprehensive set of OCR solutions, including text recognition, table recognition, form recognition, and license plate recognition. The toolkit is built on PaddlePaddle, a flexible, easy-to-use, and high-performance deep learning framework, making it possible to train custom models to meet specific OCR requirements.)
 
-We then used an algorithmic approach based on range of text values taken by the vital signs and color related information to refine our results from above.
+We then used an algorithmic approach based on range of text values taken by the vital signs and color related information to refine our results from above. The dominant color from each YOLO detected frame was extracted from the hsv space of the frame. Firstly, HSV limits for each color
+were defined and a mask was created for the same. This mask was used to quantify the area of the frame containing that particular color. 
+Based on the amount of a color present, the dominant color is chosen for each frame.
 
 ### Digitizing the Graph
 
@@ -134,6 +136,12 @@ giou: 50
 slop_loss_ratio: 0.1
 diff_loss_ratio: 0.1
 class_loss_ratio: 1
+```
+
+For YOLOv5
+
+```
+lr0=0.01 , lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
 ```
 
 ## Possible Future Work
