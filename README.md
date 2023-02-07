@@ -65,11 +65,11 @@ So towards this we again proposed a **novel loss function** :
           $$\frac{\lambda log(1+(L_{1})^{2})}{N}$$
 The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error, this significantly improved our performance, and the points that we were predicting were almost perfect.
 
-#### IOU Loss
+- #### IOU Loss
 
 We also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pred} + A_{actual}|}$ to directly improve on the IOU metric. Apart from this we saw that our model was not generalizing properly and  also had not used the unlabelled dataset as such, hence training our models on the outputs of yolov8 from the unlabelled dataset significantly improved our performance. Since our bounding boxes are quadrilateral, a better IOU loss was achieved when compared to yolov8 which is only capable of handling rectangular bounding boxes.
 
-#### Other Approaches-Classification Loss
+- #### Classification Loss
 We explored a classification loss to better the accuracy, since MSE loss function is inherently a regression loss function. To make the mobilenet learn useful feature representation, we introduced Binary cross Entropy classification loss with some random images that did not contain screen as the negative train samples. 
 
 #### Planar Homography
@@ -80,7 +80,7 @@ We used classic Computer vision techniques for warping the oblique images onto a
 
 Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and train YOLOv5 on this dataset. 
 
-### OCR related work
+### OCR related work (PaddleOCR)
 
 In this stage, we used the **PaddleOCR** library for text extraction from the bounding boxes we had. In parellel we also extracted the dominant colour in each bounding box. 
 
@@ -104,6 +104,10 @@ and added to the training data for our YOLOv5 vital extractor. This made our vit
 
 
 ## Hyperparameters:
+
+
+
+For GAYnet
 ```
 backbone_alpha: 1.4
 points_size: 8
