@@ -28,7 +28,7 @@ For loss functions we first used the Mean Squared Error but quickly realized pre
 
 We call this loss function **Monitor Loss** which can be broken into two parts, one is that check the **parallelism** of the edges of the monitor and one that maintains the **equidistance** between the corners of the monitor.
 
-$$\L _{monitor} = \beta \L _{parellel} + \gamma \L_{eq}$$
+$$\ell _{monitor} = \beta \ell _{parellel} + \gamma \ell_{eq}$$
 
 Using this novel loss function significantly improved the performance of our model but we were still seeing that the model is not exactly prediction the correct boundary points but the loss has almost converged, this can be explained by seeing that we were working with normalized coordinates so suppose if we L1error of the order of 10^-2 the the MSE will make it 10^-4 which will not leave enough gradient to flow back and will thus lead to a sluggish training and and L1error of about 10**-2 was not good because finally we will be scaling it by 400 to get the exact point coordinates which will increase the actual error.
 
