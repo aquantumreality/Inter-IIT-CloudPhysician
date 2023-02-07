@@ -58,6 +58,7 @@ The Idea behind this was first we will train our model with only the MSE loss un
 ## Pipelines
 Here is our proposed pipeline for the same:
 
+![Pipeline](https://github.com/aquantumreality/Inter-IIT-CloudPhysician/blob/main/pipeline.png "Pipeline")
 
 
 ## Training Epochs
