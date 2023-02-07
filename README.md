@@ -19,11 +19,10 @@ Diabolic Blood Pressure, and MAP from the provided images.
 ## Table of Contents
 
 - [Brief of our Work](#brief-of-our-work)
+- [Pipelines](#Pipelines)
 - [Models](#Models)
 - [Training Epochs](#training-epochs)
 - [Hyperparameter-tuning](#Hyperparameter-tuning)
-- [Pipelines](#Pipelines)
-
 
 
 ## Brief of our Work
@@ -35,6 +34,11 @@ Unlike existing object detectors we make use of a novel detector that gives non-
 As a part of our approach to the PS, we started with a YOLOv8 to segment the monitor screen from the rest of the background. But we had identified one problem here - drawing non-rectangular bounding boxes, which YOLO is inherently incapable of doing. This inspired us to build our own model for the same, inspired by the loss function used in YOLO - GAYnet (Gains Above YOLO).
 
 We used planar homography to 
+
+## Pipelines
+Here is our proposed pipeline for the same:
+
+![Pipeline](https://github.com/aquantumreality/Inter-IIT-CloudPhysician/blob/main/pipeline.png "Pipeline")
 
 ## Models
 
@@ -53,12 +57,6 @@ Using this novel loss function significantly improved the performance of our mod
 So towards this we again proposed a **novel loss function** :
           $$\frac{\lambda log(1+(L_{1})^{2})}{N}$$
 The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error, this significantly improved our performance, and the points that we were predicting were almost perfect.
-
-
-## Pipelines
-Here is our proposed pipeline for the same:
-
-![Pipeline](https://github.com/aquantumreality/Inter-IIT-CloudPhysician/blob/main/pipeline.png "Pipeline")
 
 
 ## Training Epochs
