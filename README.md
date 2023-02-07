@@ -78,7 +78,7 @@ An inherent problem with the datasets was the oblliqueness of the monitor screen
 
 ### Vital Extraction (YOLOv5)
 
-Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and trained YOLOv5 on this dataset. Owing to different color characteristics in different monitor types, we used other features such as the presence of the
+Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and trained YOLOv5 on this dataset. Owing to different color characteristics in different monitor types, we used other features such as the presence of the indicators like **HR**, **RR**, **SPO<sub>2</2>**, etc. that were common across all monitors to improve the robustness and accuracy of our model.
 
 ### OCR related work (PaddleOCR)
 
@@ -86,7 +86,7 @@ In this stage, we used the **PaddleOCR** library for text extraction from the bo
 
 (About PaddleOCR: PaddleOCR is an optical character recognition (OCR) toolkit developed by PaddlePaddle (PArallel Distributed Deep LEarning), an open-source deep learning platform. It provides a comprehensive set of OCR solutions, including text recognition, table recognition, form recognition, and license plate recognition. The toolkit is built on PaddlePaddle, a flexible, easy-to-use, and high-performance deep learning framework, making it possible to train custom models to meet specific OCR requirements.)
 
-We then used an algorithmic approach based on range of text values taken by the vital signs and color related information to refine our results from above. The dominant color from each YOLO detected frame was extracted from the hsv space of the frame. Firstly, HSV limits for each color
+We then used an algorithmic approach based on range of text values taken by the vital signs and the possible colors that a vital could take to refine our results from above. The dominant color from each YOLO detected frame was extracted from the hsv space of the frame. Firstly, HSV limits for each color
 were defined and a mask was created for the same. This mask was used to quantify the area of the frame containing that particular color. 
 Based on the amount of a color present, the dominant color is chosen for each frame.
 
