@@ -33,13 +33,13 @@ The Vital Extractor model built by Team-13 leverages segmentation, object detect
 
 Unlike existing object detectors we make use of a novel detector that gives non-rectangular bounding boxes as well. Using this as the base of our object detector, we use state of the art methods (such as YOLO) to do color-based detection and refinement of the vitals present on screen. To top it all off, we make use of a custom edge detector to digitise the graphs present on the monitor screen yielding promising results.
 
-As a part of our approach to the PS, we started with a YOLO to segment the monitor screen from the rest of the background. But we had identified one problem here - drawing non-rectangular bounding boxes, which YOLO is inherently incapable of doing. This inspired us to build our own model for the same, called GAYnet (Gains Above YOLO) - inspired by the loss function used in YOLO. 
+As a part of our approach to the PS, we started with a YOLO to segment the monitor screen from the rest of the background. But we had identified one problem here - drawing non-rectangular bounding boxes, which YOLO is inherently incapable of doing. This inspired us to build our own model for the same, called **GAYnet** (Gains Above YOLO) - inspired by the loss function used in YOLO. 
 
-We tried out several existing OCR frameworks for extracting text from the segmented monitor image. Since this was not able to yield desired results, we used YOLOv5 for localization of vitals on the screen and then leveraging paddleOCR post-vital localization inherently accelerated our pipeline and reduced the inference time from around 20 seconds to less than 2 seconds. 
+We tried out several existing OCR frameworks for extracting text from the segmented monitor image. Since this was not able to yield desired results, we used YOLOv5 for localization of vitals on the screen and then leveraging **paddleOCR** post-vital localization inherently accelerated our pipeline and reduced the inference time from around 20 seconds to less than 2 seconds. 
 
-We tried SRResnet and several other resolution techniques for improving the resolution of the segmented monitor image, and then adaptive thresholding as it was yielding better results. But since there was loss of information, this was not a part of out final pipeline. Following this, we realized that it wasn't really required in our pipeline as well. 
+We tried **SRResnet** and several other resolution techniques for improving the resolution of the segmented monitor image, and then adaptive thresholding as it was yielding better results. But since there was loss of information, this was not a part of out final pipeline. Following this, we realized that it wasn't really required in our pipeline as well. 
 
-For digitizing the heart rate, we also tried out Vision Transformer models like DINO (for crack detection) but using Canny Edge algorithms gave us more promising results in comparison and more robustness, reduce time complexity.  
+For digitizing the heart rate, we also tried out Vision Transformer models like **DINO** (for crack detection) but using **Canny Edge algorithms** gave us more promising results in comparison and more robustness, reduce time complexity.  
 
 
 
@@ -79,11 +79,11 @@ We explored a classification loss to better the accuracy, since MSE loss functio
 
 We used classic Computer vision techniques for warping the oblique images onto a plane.
 
-- #### YOLOv5
+### Vital Extraction (YOLOv5)
 
 Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and train YOLOv5 on this dataset. 
 
-## Vital Extraction
+### OCR related work
 
 In this stage, we used the **PaddleOCR** library for text extraction from the bounding boxes we had. In parellel we also extracted the dominant colour in each bounding box. 
 
@@ -91,7 +91,7 @@ In this stage, we used the **PaddleOCR** library for text extraction from the bo
 
 We then used an algorithmic approach based on range of text values taken by the vital signs and color related information to refine our results from above.
 
-## Digitizing the Graph
+### Digitizing the Graph
 
 We used concepts from the Canny Edge detection algorithm (like non-maximum suppression) to extract out the x and y coordinates of the graph and plot it using matplotlib. We used scipy.interpolate to interpolate the extracted points (spline interpolation) and generate the digitized graph. 
 
@@ -107,6 +107,7 @@ and added to the training data for our YOLOv5 vital extractor. This made our vit
 
 
 ## Hyperparameters:
+```
 backbone_alpha: 1.4
 points_size: 8
 batch_size: 16
@@ -132,6 +133,7 @@ giou: 50
 slop_loss_ratio: 0.1
 diff_loss_ratio: 0.1
 class_loss_ratio: 1
+```
 
 ## Possible Future Work
 
