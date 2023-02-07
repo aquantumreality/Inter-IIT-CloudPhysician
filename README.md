@@ -53,7 +53,7 @@ Here is our proposed pipeline for the same:
 
 To solve the problem of predicting quadilateral bounding boxes, we propose the Gains-Above-YOLO-Net or as we like to call it the <b>GAYnet</b> , in it we first used a <b>MobileNetv2</b> backbone that will help us in extracting features from the images, we particularly choose **MobileNetv2** because the evaluation was on the CPU inference time which motivated us to be as fast as possible, we took the output feature maps of the **MobileNetv2** model. To improve the accuracy we extract **five** feature maps with different spatial resolutions from the backbone and perform a Global Average Pooling and resize them to the same size. We then stack three fully connected layers on top of this extracted feature map, the first fully connected layer will give us the corner points of the quadilateral bounding box, the second fully connected layer will give us N - 4 points, that are equally distributed and equispaced among the four sides (where N is the total number of points we are predicting).
 
-For loss functions we first used the Mean Squared Error but quickly realized precision localization and segmentation tasks are fundamentally difficult for standard Deep Convolutional Neural Network designs to complete. This happens because the final convolutional layer only includes the most prominent aspects of the entire image. These features lack the data necessary for pixel-level segmentation, despite being very helpful for classification and bounding box detection so towards the end we predict the corners in a line-prediction fashion.We identify the equal-division points on the lines in addition to the four corner points, allowing the labels to be created automatically with no further human input needed.
+For loss functions we first used the Mean Squared Error but quickly realized precision localization and segmentation tasks are fundamentally difficult for standard Deep Convolutional Neural Network designs to complete. This happens because the final convolutional layer only includes the most prominent aspects of the entire image. These features lack the data necessary for pixel-level segmentation, despite being very helpful for classification and bounding box detection so towards the end we predict the corners in a line-prediction fashion. We identify the equal-division points on the lines in addition to the four corner points, allowing the labels to be created automatically with no further human input needed.
 
 We call this loss function **Monitor Loss** which can be broken into two parts, one is that check the **parallelism** of the edges of the monitor and one that maintains the **equidistance** between the corners of the monitor.
 
@@ -96,9 +96,9 @@ We used concepts from the Canny Edge detection algorithm (like non-maximum suppr
 
 ## Leveraging data 
 - The 2000 images from the monitor segmentation dataset were used to train our GAYnet segmentor. 
-- Monitor images from the classification dataset were used to train the yolov5 vital extractor.
+- Monitor images from the classification dataset were used to train the YOLOv5 vital extractor.
 - The Unlabelled data was used to a large extent. Firstly, a YOLO model was used to generate annotations for 750 images from the unlabelled dataset that had unseen features. These images were added to the 2000 monitor segmentation images for training which greatly improved the performance of our Gaynet model
-- 200 monitor screens covering all varieties from the unlabelled dataset were again annotated for each specific vital 
+- 200 monitor screens covering all varieties from the unlabelled dataset were again annotated for each specific vital. 
 and added to the training data for our YOLOv5 vital extractor. This made our vital extractor more robust and versatile.
 
 ## Inference Time
