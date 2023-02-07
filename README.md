@@ -62,7 +62,7 @@ $$\mathcal{L} _{monitor} = \varphi \mathcal{L} _{parellel} + \eta \mathcal{L}_{e
 Using this novel loss function significantly improved the performance of our model but we were still seeing that the model is not exactly predicting the correct boundary points even though the loss has almost converged. This can be explained by seeing that we were working with normalized coordinates so suppose if the $L_{1}$ error is of the order of $10^{-2}$ then the MSE will make it $10^{-4}$ which will not leave enough gradient to flow back. This  will thus lead to a sluggish training and and $L_{1}$ error of about $0.01$ which is not good at all because finally we will be scaling it by 400 to get the exact point coordinates, thereby increasing the actual error by a significant amount.
 
 So towards this we again proposed a **novel loss function** :
-          $$\frac{\lambda log(1+(L_{1}))^{2}}{N}$$
+          $$\frac{(\lambda log(1+(L_{1})))^{2}}{N}$$
 The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error. This led to significant improvements in our performance, and the points that we were now predicting were almost perfect.
 
 - #### IOU Loss
