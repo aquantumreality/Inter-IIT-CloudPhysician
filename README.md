@@ -23,7 +23,7 @@ Diabolic Blood Pressure, and MAP from the provided images.
 - [Models](#Models)
 - [Leveraging-data](#leveraging-data)
 - [Inference Time](#inference-time)
-- [Hyperparameter-tuning](#Hyperparameter-tuning)
+- [Hyperparameters](#Hyperparameters)
 - [Possible Future Work](#possible-future-work)
 
 
@@ -38,6 +38,8 @@ As a part of our approach to the PS, we started with a YOLO to segment the monit
 We tried out several existing OCR frameworks for extracting text from the segmented monitor image. Since this was not able to yield desired results, we used YOLOv5 for localization of vitals on the screen and then leveraging **paddleOCR** post-vital localization inherently accelerated our pipeline and reduced the inference time from around 20 seconds to less than 2 seconds. 
 
 We tried **SRResnet** and several other resolution techniques for improving the resolution of the segmented monitor image, and then adaptive thresholding as it was yielding better results. But since there was loss of information, this was not a part of out final pipeline. Following this, we realized that it wasn't really required in our pipeline as well. 
+
+
 
 For digitizing the heart rate, we also tried out Vision Transformer models like **DINO** (for crack detection) but using our custom edge detector gave us more promising results in comparison and more robustness, reduce time complexity.  
 
@@ -70,7 +72,7 @@ The Idea behind this was first we will train our model with only the MSE loss un
 We also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pred} + A_{actual}|}$ to directly improve on the IOU metric. Apart from this we saw that our model was not generalizing properly and  also had not used the unlabelled dataset as such, hence training our models on the outputs of yolov8 from the unlabelled dataset significantly improved our performance. Since our bounding boxes are quadrilateral, a better IOU loss was achieved when compared to yolov8 which is only capable of handling rectangular bounding boxes.
 
 - #### Classification Loss
-We explored a classification loss to better the accuracy, since MSE loss function is inherently a regression loss function. To make the mobilenet learn useful feature representation, we introduced Binary cross Entropy classification loss with some random images that did not contain screen as the negative train samples. 
+We explored a classification loss to better the accuracy, since MSE loss function is inherently a regression loss function. To make the mobilenet learn useful feature representation, we introduced Binary cross Entropy classification loss with some random images that did not contain screen as the negative train samples. However, we did not find significant improvements over our existing loss functions and hence we decided to continue with our existing pipeline, keeping this as our backup in case we encountered any exceptional monitor images. 
 
 - #### Planar Homography
 
@@ -167,5 +169,6 @@ shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_
 
 ## Possible Future Work
 
-One of our ideas was to use a teacher-student mechanism between YOLOV8 and GAYnet for training GAYnet. 
+- One possible idea could be to use a teacher-student mechanism between YOLOV8 and GAYnet for training GAYnet. We hope to try this out 
+- 
 
