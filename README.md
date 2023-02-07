@@ -39,7 +39,7 @@ We tried out several existing OCR frameworks for extracting text from the segmen
 
 We tried **SRResnet** and several other resolution techniques for improving the resolution of the segmented monitor image, and then adaptive thresholding as it was yielding better results. But since there was loss of information, this was not a part of out final pipeline. Following this, we realized that it wasn't really required in our pipeline as well. 
 
-For digitizing the heart rate, we also tried out Vision Transformer models like **DINO** (for crack detection) but using **Canny Edge algorithms** gave us more promising results in comparison and more robustness, reduce time complexity.  
+For digitizing the heart rate, we also tried out Vision Transformer models like **DINO** (for crack detection) but using our custom edge detector gave us more promising results in comparison and more robustness, reduce time complexity.  
 
 
 ## Pipelines
@@ -59,11 +59,11 @@ We call this loss function **Monitor Loss** which can be broken into two parts, 
 
 $$\mathcal{L} _{monitor} = \varphi \mathcal{L} _{parellel} + \eta \mathcal{L}_{eq}$$
 
-Using this novel loss function significantly improved the performance of our model but we were still seeing that the model is not exactly ting the correct boundary points even though the loss has almost converged. This can be explained by seeing that we were working with normalized coordinates so suppose if the $L_{1}$ error is of the order of $10^{-2}$ then the MSE will make it $10^{-4}$ which will not leave enough gradient to flow back. This  will thus lead to a sluggish training and and $L_{1}$ error of about $0.01$ which is not good at all because finally we will be scaling it by 400 to get the exact point coordinates, thereby increasing the actual error by a significant amount.
+Using this novel loss function significantly improved the performance of our model but we were still seeing that the model is not exactly predicting the correct boundary points even though the loss has almost converged. This can be explained by seeing that we were working with normalized coordinates so suppose if the $L_{1}$ error is of the order of $10^{-2}$ then the MSE will make it $10^{-4}$ which will not leave enough gradient to flow back. This  will thus lead to a sluggish training and and $L_{1}$ error of about $0.01$ which is not good at all because finally we will be scaling it by 400 to get the exact point coordinates, thereby increasing the actual error by a significant amount.
 
 So towards this we again proposed a **novel loss function** :
           $$\frac{\lambda log(1+(L_{1})^{2})}{N}$$
-The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error, this significantly improved our performance, and the points that we were predicting were almost perfect.
+The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error. This led to significant improvements in our performance, and the points that we were now predicting were almost perfect.
 
 - #### IOU Loss
 
@@ -74,11 +74,11 @@ We explored a classification loss to better the accuracy, since MSE loss functio
 
 #### Planar Homography
 
-We used classic Computer vision techniques for warping the oblique images onto a plane.
+An inherent problem with the datasets was the oblliqueness of the monitor screens which led to issues in optical character recognition of the vitals.Therefore, we used classic Computer vision techniques for warping the oblique images onto a plane to make it easier for the OCR to recognize the vitals accuractely.
 
 ### Vital Extraction (YOLOv5)
 
-Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and train YOLOv5 on this dataset. 
+Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and trained YOLOv5 on this dataset. Owing to different color characteristics in different monitor types, we used other features such as the presence of the
 
 ### OCR related work (PaddleOCR)
 
