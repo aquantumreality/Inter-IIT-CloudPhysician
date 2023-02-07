@@ -120,7 +120,7 @@ print(f'Inference time: {(end_time-start_time):.2f}')
 ```
 Inference time: 1.58
 ```
-
+![impl_ss]{https://github.com/aquantumreality/Inter-IIT-CloudPhysician/blob/main/ssinf.jpeg}
 
 ## Hyperparameters:
 
