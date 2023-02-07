@@ -37,9 +37,7 @@ As a part of our approach to the PS, we started with a YOLO to segment the monit
 
 We tried out several existing OCR frameworks for extracting text from the segmented monitor image. Since this was not able to yield desired results, we used YOLOv5 for localization of vitals on the screen and then leveraging **paddleOCR** post-vital localization inherently accelerated our pipeline and reduced the inference time from around 20 seconds to less than 2 seconds. 
 
-We tried **SRResnet** and several other resolution techniques for improving the resolution of the segmented monitor image, and then adaptive thresholding as it was yielding better results. But since there was loss of information, this was not a part of out final pipeline. Following this, we realized that it wasn't really required in our pipeline as well. 
-
-
+We tried **SRResnet** and several other resolution techniques for improving the resolution of the segmented monitor image, and then adaptive thresholding as it was yielding better results. But since there was loss of information, this was not a part of out final pipeline. Following this, we realized that it was not really helping us in our pipeline as well. 
 
 For digitizing the heart rate, we also tried out Vision Transformer models like **DINO** (for crack detection) but using our custom edge detector gave us more promising results in comparison and more robustness, reduce time complexity.  
 
@@ -169,6 +167,5 @@ shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_
 
 ## Possible Future Work
 
-- One possible idea could be to use a teacher-student mechanism between YOLOV8 and GAYnet for training GAYnet. We hope to try this out 
-- 
-
+- One possible idea could be to use a teacher-student mechanism between YOLOV8 and GAYnet for training GAYnet. 
+- This approach can be further streamlined by using mixture-of-experts, helping us generalize for monitor types not present in the dataset better. 
