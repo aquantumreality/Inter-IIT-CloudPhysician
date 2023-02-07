@@ -78,7 +78,7 @@ An inherent problem with the datasets was the oblliqueness of the monitor screen
 
 ### Vital Extraction (YOLOv5)
 
-Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and trained YOLOv5 on this dataset. Owing to different color characteristics in different monitor types, we used other features such as the presence of the indicators like **HR**, **RR**, **SPO<sub>2</2>**, etc. that were common across all monitors to improve the robustness and accuracy of our model.
+Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and trained YOLOv5 on this dataset. Owing to different color characteristics in different monitor types, we used other features such as the presence of the indicators like **HR**, **RR**, **SPO<sub>2</sub>**, etc. that were common across all monitors to improve the robustness and accuracy of our model.
 
 ### OCR related work (PaddleOCR)
 
@@ -102,7 +102,24 @@ We used concepts from the Canny Edge detection algorithm (like non-maximum suppr
 and added to the training data for our YOLOv5 vital extractor. This made our vital extractor more robust and versatile.
 
 ## Inference Time
+```
+import time
+from timeit import default_timer as timer
 
+path = '/content/gdrive/MyDrive/Vital_extraction/seg_test/hcgvijayawada_icu_mon--8_2023_1_5_1_27_36.jpeg'
+
+start_time = timer()
+
+results = Pipeline(path, model, model_yolo, reader)
+
+end_time = timer()
+
+print(f'Inference time: {(end_time-start_time):.2f}')
+```
+
+```
+Inference time: 1.58
+```
 
 
 ## Hyperparameters:
