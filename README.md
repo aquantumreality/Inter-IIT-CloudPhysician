@@ -42,9 +42,6 @@ We tried **SRResnet** and several other resolution techniques for improving the 
 For digitizing the heart rate, we also tried out Vision Transformer models like **DINO** (for crack detection) but using **Canny Edge algorithms** gave us more promising results in comparison and more robustness, reduce time complexity.  
 
 
-
-
-
 ## Pipelines
 Here is our proposed pipeline for the same:
 
@@ -52,7 +49,7 @@ Here is our proposed pipeline for the same:
 
 ## Models
 
-- ### Monitor Segmentation
+### Monitor Segmentation
 
 To solve the problem of predicting quadilateral bounding boxes, we propose the Gains-Above-YOLO-Net or as we like to call it the <b>GAYnet</b> , in it we first used a <b>MobileNetv2</b> backbone that will help us in extracting features from the images, we particularly choose **MobileNetv2** because the evaluation was on the CPU inference time which motivated us to be as fast as possible, we took the output feature maps of the **MobileNetv2** model. To improve the accuracy we extract **five** feature maps with different spatial resolutions from the backbone and perform a Global Average Pooling and resize them to the same size. We then stack three fully connected layers on top of this extracted feature map, the first fully connected layer will give us the corner points of the quadilateral bounding box, the second fully connected layer will give us N - 4 points, that are equally distributed and equispaced among the four sides (where N is the total number of points we are predicting).
 
@@ -68,14 +65,14 @@ So towards this we again proposed a **novel loss function** :
           $$\frac{\lambda log(1+(L_{1})^{2})}{N}$$
 The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error, this significantly improved our performance, and the points that we were predicting were almost perfect.
 
-- #### IOU Loss
+#### IOU Loss
 
 We also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pred} + A_{actual}|}$ to directly improve on the IOU metric. Apart from this we saw that our model was not generalizing properly and  also had not used the unlabelled dataset as such, hence training our models on the outputs of yolov8 from the unlabelled dataset significantly improved our performance. Since our bounding boxes are quadrilateral, a better IOU loss was achieved when compared to yolov8 which is only capable of handling rectangular bounding boxes.
 
-- #### Other Approaches-Classification Loss
+#### Other Approaches-Classification Loss
 We explored a classification loss to better the accuracy, since MSE loss function is inherently a regression loss function. To make the mobilenet learn useful feature representation, we introduced Binary cross Entropy classification loss with some random images that did not contain screen as the negative train samples. 
 
-- #### Planar Homography
+#### Planar Homography
 
 We used classic Computer vision techniques for warping the oblique images onto a plane.
 
