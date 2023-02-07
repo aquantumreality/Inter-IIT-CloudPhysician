@@ -102,6 +102,8 @@ We used concepts from the Canny Edge detection algorithm (like non-maximum suppr
 and added to the training data for our YOLOv5 vital extractor. This made our vital extractor more robust and versatile.
 
 ## Inference Time
+
+On an average, the CPU inference time is lower than 2 seconds and consistently around 1.5 seconds. 
 ```
 import time
 from timeit import default_timer as timer
@@ -118,7 +120,7 @@ print(f'Inference time: {(end_time-start_time):.2f}')
 ```
 
 ```
-Inference time: 1.58
+Inference time: 1.57
 ```
 ![impl_ss](https://github.com/aquantumreality/Inter-IIT-CloudPhysician/blob/main/inferfinalv2.ipynb%20-%20Colaboratory%20-%20Google%20Chrome%2007_02_2023%2011_02_18%20PM.png)
 
