@@ -55,6 +55,9 @@ So towards this we again proposed a **novel loss function** :
 The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error, this significantly improved our performance, and the points that we were predicting were almost perfect.
 
 
+## Pipelines
+Here is our proposed pipeline for the same:
+
 
 
 ## Training Epochs
@@ -62,9 +65,6 @@ The Idea behind this was first we will train our model with only the MSE loss un
 
 
 ## Hyperparameter-tuning
-
-
-## Pipelines
 
 
 
