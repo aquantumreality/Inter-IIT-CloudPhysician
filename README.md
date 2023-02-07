@@ -1,4 +1,4 @@
-# Team 13 - Cloud Physician, Inter IIT Tech Meet 11.0
+# Team 13 - Cloud Physician, Inter IIT Tech Meet 11.0 (Team ID - 13, Secondary ID - 26)
 
 Patient monitoring is a crucial aspect of healthcare, as it allows healthcare professionals
 to closely track a patient's vital signs and detect any potential issues before they become
@@ -66,6 +66,3 @@ The Idea behind this was first we will train our model with only the MSE loss un
 ## Hyperparameter-tuning
 
 
-
-
-## Authors
