@@ -45,7 +45,7 @@ For digitizing the heart rate, we also tried out Vision Transformer models like 
 ## Pipelines
 Here is our proposed pipeline for the same:
 
-![Pipeline](https://github.com/aquantumreality/Inter-IIT-CloudPhysician/blob/main/pipeline.png "Pipeline")
+![Pipeline](https://github.com/aquantumreality/Inter-IIT-CloudPhysician/blob/main/pipeshow.png "Pipeline")
 
 ## Models
 
