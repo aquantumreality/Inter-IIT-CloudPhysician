@@ -9,7 +9,6 @@ A brief description of your project, including the purpose and goals of the proj
 - [Training Epochs](#Training Epochs)
 - [Hyperparameter-tuning](#Hyperparameter-tuning)
 - [Pipelines](#Pipelines)
-- [Authors](#Authors)
 
 
 ## Brief of our Work
@@ -28,6 +27,3 @@ A brief description of your project, including the purpose and goals of the proj
 ## Pipelines
 
 
-
-
-## Authors
