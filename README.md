@@ -22,7 +22,7 @@ Diabolic Blood Pressure, and MAP from the provided images.
 - [Pipelines](#Pipelines)
 - [Models](#Models)
 - [Leveraging-data](#leveraging-data)
-- [Training Epochs](#training-epochs)
+- [Inference Time](#inference-time)
 - [Hyperparameter-tuning](#Hyperparameter-tuning)
 - [Possible Future Work](#possible-future-work)
 
@@ -101,12 +101,11 @@ We used concepts from the Canny Edge detection algorithm (like non-maximum suppr
 - 200 monitor screens covering all varieties from the unlabelled dataset were again annotated for each specific vital 
 and added to the training data for our YOLOv5 vital extractor. This made our vital extractor more robust and versatile.
 
-## Training Epochs
+## Inference Time
 
 
 
 ## Hyperparameters:
-
 
 
 For GAYnet
