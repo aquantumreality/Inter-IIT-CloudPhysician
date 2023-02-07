@@ -19,11 +19,12 @@ Unlike existing object detectors we make use of a novel detector that gives non 
 
 ## Models
 
-- ### Monitor Segmentation
+### Monitor Segmentation
 
+#### Approach
 To solve the problem of predicting quadilateral bounding boxes, we propose the Gains-Above-YOLO-Net or as we like to call it the <b>GAYnet</b> , in it we first used a <b>MobileNetv2</b> backbone that will help us in extracting features from the images,  we particularly choose **MobileNetv2** because the evaluation was on the cpu inference time which motivated us to be as fast as possible, we took the output feature maps of the **MobileNetv2** model. To improve the accuracy we extract **five** feature maps with different spatial resolutions from the backbone and perform a Global Average Pooling and resize them to the same size. We then stack three fully connected layers on top of this extracted feature map, the first fully connected layer will give us the corner points of the quadilateral bounding box, the second fully connected layer will give us N - 4 points, that are equally distributed and equispaced among the four sides(Where N is the total number of points we are predicting).
 
-
+#### Novel Loss Functions
 For loss functions we first used the Mean Squared Error but quickly realized precision localization and segmentation tasks are fundamentally difficult for standard Deep Convolutional Neural Network designs to complete. This happens because the final convolutional layer only includes the most prominent aspects of the entire image. These features lack the data necessary for pixel-level segmentation, despite being very helpful for classification and bounding box detection so towards the end we predict the corners in a line-prediction fashion.We identify the equal-division points on the lines in addition to the four corner points, allowing the labels to be created automatically with no further human input needed.
 
 We call this loss function **Monitor Loss** which can be broken into two parts, one is that check the **parallelism** of the edges of the monitor and one that maintains the **equidistance** between the corners of the monitor.
@@ -36,10 +37,10 @@ So towards this we again proposed a **novel loss function** :
           $$\frac{\lambda log(1+(L_{1})^{2})}{N}$$
 The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write lambda*log(1 + x) as lambda*x and here we could set lambda 1000 for making the model focus more of the 3rd decimal place, we also squared the final error because we only wanted positive error, this significantly improved our performance, and the points that we were predicting were almost perfect.
 
+#### IOU Loss
 
-
-
-
+we also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pred} + A_{actual}|}$ to directly improve on the IOU metric. Apart from this we saw that our model was not generalizing properly and  also had not used the unlabelled dataset as such, hence training our models on the outputs of yolov8 from the unlabelled dataset significantly improved our performance. Since our bounding boxes are quadrilateral, a better IOU loss was achieved when compared to yolov8 which is only capable of handling rectangular bounding boxes.
+ 
 ## Training Epochs
 
 
