@@ -21,8 +21,10 @@ Diabolic Blood Pressure, and MAP from the provided images.
 - [Brief of our Work](#brief-of-our-work)
 - [Pipelines](#Pipelines)
 - [Models](#Models)
+- [Leveraging-data](#leveraging-data)
 - [Training Epochs](#training-epochs)
 - [Hyperparameter-tuning](#Hyperparameter-tuning)
+- [Possible Future Work](#possible-future-work)
 
 
 ## Brief of our Work
@@ -31,9 +33,17 @@ The Vital Extractor model built by Team-13 leverages segmentation, object detect
 
 Unlike existing object detectors we make use of a novel detector that gives non-rectangular bounding boxes as well. Using this as the base of our object detector, we use state of the art methods (such as YOLO) to do color-based detection and refinement of the vitals present on screen. To top it all off, we make use of a custom edge detector to digitise the graphs present on the monitor screen yielding promising results.
 
-As a part of our approach to the PS, we started with a YOLOv8 to segment the monitor screen from the rest of the background. But we had identified one problem here - drawing non-rectangular bounding boxes, which YOLO is inherently incapable of doing. This inspired us to build our own model for the same, inspired by the loss function used in YOLO - GAYnet (Gains Above YOLO).
+As a part of our approach to the PS, we started with a YOLO to segment the monitor screen from the rest of the background. But we had identified one problem here - drawing non-rectangular bounding boxes, which YOLO is inherently incapable of doing. This inspired us to build our own model for the same, called GAYnet (Gains Above YOLO) - inspired by the loss function used in YOLO. 
 
-We used planar homography to 
+We tried out several existing OCR frameworks for extracting text from the segmented monitor image. Since this was not able to yield desired results, we used YOLOv5 for localization of vitals on the screen and then leveraging paddleOCR post-vital localization inherently accelerated our pipeline and reduced the inference time from around 20 seconds to less than 2 seconds. 
+
+We tried SRResnet and several other resolution techniques for improving the resolution of the segmented monitor image, and then adaptive thresholding as it was yielding better results. But since there was loss of information, this was not a part of out final pipeline. Following this, we realized that it wasn't really required in our pipeline as well. 
+
+For digitizing the heart rate, we also tried out Vision Transformer models like DINO (for crack detection) but using Canny Edge algorithms gave us more promising results in comparison and more robustness, reduce time complexity.  
+
+
+
+
 
 ## Pipelines
 Here is our proposed pipeline for the same:
@@ -58,6 +68,39 @@ So towards this we again proposed a **novel loss function** :
           $$\frac{\lambda log(1+(L_{1})^{2})}{N}$$
 The Idea behind this was first we will train our model with only the MSE loss until it converged and then we will switch to the Log Loss, for which now the error will be very small as compared to 1 so we could effectively write log(1 + x) as x and here we could set lambda=1000 for making the model focus more on the 3rd decimal place, we also squared the final error because we only wanted positive error, this significantly improved our performance, and the points that we were predicting were almost perfect.
 
+- #### IOU Loss
+
+we also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pred} + A_{actual}|}$ to directly improve on the IOU metric. Apart from this we saw that our model was not generalizing properly and  also had not used the unlabelled dataset as such, hence training our models on the outputs of yolov8 from the unlabelled dataset significantly improved our performance. Since our bounding boxes are quadrilateral, a better IOU loss was achieved when compared to yolov8 which is only capable of handling rectangular bounding boxes.
+
+- #### Other Approaches-Classification Loss
+We explored a classification loss to better the accuracy, since MSE loss function is inherently a regression loss function. To make the mobilenet learn useful feature representation, we introduced Binary cross Entropy classification loss with some random images that did not contain screen as the negative train samples. 
+
+- #### Planar Homography
+
+We used classic Computer vision techniques for warping the oblique images onto a plane.
+
+- #### YOLOv5
+
+Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and train YOLOv5 on this dataset. 
+
+- #### Vital Extraction
+
+In this stage, we used the **PaddleOCR** library for text extraction from the bounding boxes we had. In parellel we also extracted the dominant colour in each bounding box. 
+
+(About PaddleOCR: PaddleOCR is an optical character recognition (OCR) toolkit developed by PaddlePaddle (PArallel Distributed Deep LEarning), an open-source deep learning platform. It provides a comprehensive set of OCR solutions, including text recognition, table recognition, form recognition, and license plate recognition. The toolkit is built on PaddlePaddle, a flexible, easy-to-use, and high-performance deep learning framework, making it possible to train custom models to meet specific OCR requirements.)
+
+We then used an algorithmic approach based on range of text values taken by the vital signs and color related information to refine our results from above.
+
+- #### Digitizing the Graph
+
+We used concepts from the Canny Edge detection algorithm (like non-maximum suppression) to extract out the x and y coordinates of the graph and plot it using matplotlib. We used scipy.interpolate to interpolate the extracted points (spline interpolation) and generate the digitized graph. 
+
+## Leveraging data 
+- The 2000 images from the monitor segmentation dataset were used to train our GAYnet segmentor. 
+- Monitor images from the classification dataset were used to train the yolov5 vital extractor.
+- The Unlabelled data was used to a large extent. Firstly, a YOLO model was used to generate annotations for 750 images from the unlabelled dataset that had unseen features. These images were added to the 2000 monitor segmentation images for training which greatly improved the performance of our Gaynet model
+- 200 monitor screens covering all varieties from the unlabelled dataset were again annotated for each specific vital 
+and added to the training data for our YOLOv5 vital extractor. This made our vital extractor more robust and versatile.
 
 ## Training Epochs
 
@@ -65,4 +108,8 @@ The Idea behind this was first we will train our model with only the MSE loss un
 
 ## Hyperparameter-tuning
 
+
+## Possible Future Work
+
+One of our ideas was to use a teacher-student mechanism between YOLOV8 and GAYnet for training GAYnet. 
 
