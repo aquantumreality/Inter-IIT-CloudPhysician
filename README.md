@@ -92,7 +92,7 @@ Based on the amount of a color present, the dominant color is chosen for each fr
 
 ### Digitizing the Graph
 
-We used concepts from the Canny Edge detection algorithm (like non-maximum suppression) to extract out the x and y coordinates of the graph and plot it using matplotlib. We used scipy.interpolate to interpolate the extracted points (spline interpolation) and generate the digitized graph. 
+We used concepts from the Canny Edge detection algorithm (like non-maximum suppression) to extract out the x and y coordinates of the graph and plot it using matplotlib. We used ```scipy.interpolate``` to interpolate the extracted points (spline interpolation) and generate the digitized graph. 
 
 ## Leveraging data 
 - The 2000 images from the monitor segmentation dataset were used to train our GAYnet segmentor. 
