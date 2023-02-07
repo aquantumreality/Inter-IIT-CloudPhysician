@@ -70,7 +70,7 @@ The Idea behind this was first we will train our model with only the MSE loss un
 
 - #### IOU Loss
 
-we also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pred} + A_{actual}|}$ to directly improve on the IOU metric. Apart from this we saw that our model was not generalizing properly and  also had not used the unlabelled dataset as such, hence training our models on the outputs of yolov8 from the unlabelled dataset significantly improved our performance. Since our bounding boxes are quadrilateral, a better IOU loss was achieved when compared to yolov8 which is only capable of handling rectangular bounding boxes.
+We also added IOU loss function which was $\frac{|A_{pred} - A_{actual}|}{|A_{pred} + A_{actual}|}$ to directly improve on the IOU metric. Apart from this we saw that our model was not generalizing properly and  also had not used the unlabelled dataset as such, hence training our models on the outputs of yolov8 from the unlabelled dataset significantly improved our performance. Since our bounding boxes are quadrilateral, a better IOU loss was achieved when compared to yolov8 which is only capable of handling rectangular bounding boxes.
 
 - #### Other Approaches-Classification Loss
 We explored a classification loss to better the accuracy, since MSE loss function is inherently a regression loss function. To make the mobilenet learn useful feature representation, we introduced Binary cross Entropy classification loss with some random images that did not contain screen as the negative train samples. 
@@ -83,7 +83,7 @@ We used classic Computer vision techniques for warping the oblique images onto a
 
 Post usage of our novel monitor segmentation model, yolov5 was leveraged to detect bounding boxes around the vitals. We took around 200 images from the unlabelled and 300 images from the classification dataset, manually annotated them using Roboflow and augmented those 500 images to get a dataset of 1200 images and train YOLOv5 on this dataset. 
 
-- #### Vital Extraction
+## Vital Extraction
 
 In this stage, we used the **PaddleOCR** library for text extraction from the bounding boxes we had. In parellel we also extracted the dominant colour in each bounding box. 
 
@@ -91,7 +91,7 @@ In this stage, we used the **PaddleOCR** library for text extraction from the bo
 
 We then used an algorithmic approach based on range of text values taken by the vital signs and color related information to refine our results from above.
 
-- #### Digitizing the Graph
+## Digitizing the Graph
 
 We used concepts from the Canny Edge detection algorithm (like non-maximum suppression) to extract out the x and y coordinates of the graph and plot it using matplotlib. We used scipy.interpolate to interpolate the extracted points (spline interpolation) and generate the digitized graph. 
 
@@ -106,8 +106,32 @@ and added to the training data for our YOLOv5 vital extractor. This made our vit
 
 
 
-## Hyperparameter-tuning
+## Hyperparameters:
+backbone_alpha: 1.4
+points_size: 8
+batch_size: 16
+epochs: 400
+img_folder_path: 
+- "/kaggle/input/vitalextr2/images"
+annotations_path:
+- "/kaggle/input/vitalextr2/labels.csv"
+class_list:
+- 1
+rate: 0.001
+gamma: 0.5
+bounds:
+- 50
+- 100
+- 150
+- 200
 
+loss:
+loss_ratio: 50
+log: 100
+giou: 50
+slop_loss_ratio: 0.1
+diff_loss_ratio: 0.1
+class_loss_ratio: 1
 
 ## Possible Future Work
 
