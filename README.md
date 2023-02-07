@@ -4,7 +4,7 @@ A brief description of your project, including the purpose and goals of the proj
 
 ## Table of Contents
 
-- [Brief of our Work](#Brief of our Work)
+- [Brief](#Brief)
 - [Models](#Models)
 - [Training Epochs](#Training Epochs)
 - [Hyperparameter-tuning](#Hyperparameter-tuning)
